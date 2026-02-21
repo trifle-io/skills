@@ -1,0 +1,9 @@
+{
+  "name": "trifle-skills",
+  "description": "Agent skills for the Trifle ecosystem. Time-series metrics, execution tracing, and CLI analytics.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Trifle",
+    "url": "https://trifle.io"
+  }
+}
