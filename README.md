@@ -8,9 +8,9 @@ Part of the [Trifle](https://trifle.io) ecosystem.
 
 | Skill | What it teaches |
 |-------|----------------|
-| **[trifle-stats](trifle-stats/SKILL.md)** | Time-series metrics in Ruby, Elixir, and Go. Values payload structure, dimensional tracking, duration with standard deviation, key splitting strategies. |
-| **[trifle-traces](trifle-traces/SKILL.md)** | Structured execution tracing in Ruby. How to trace conditions, API calls, loops, and objects so the full execution flow is readable. |
-| **[trifle-cli](trifle-cli/SKILL.md)** | Command-line metrics with local SQLite storage. Agent analytics workflows, push/query patterns, MCP server mode. |
+| **[trifle-stats](trifle-stats/skills/trifle-stats/SKILL.md)** | Time-series metrics in Ruby, Elixir, and Go. Values payload structure, dimensional tracking, duration with standard deviation, key splitting strategies. |
+| **[trifle-traces](trifle-traces/skills/trifle-traces/SKILL.md)** | Structured execution tracing in Ruby. How to trace conditions, API calls, loops, and objects so the full execution flow is readable. |
+| **[trifle-cli](trifle-cli/skills/trifle-cli/SKILL.md)** | Command-line metrics with local SQLite storage. Agent analytics workflows, push/query patterns, MCP server mode. |
 
 ## Install
 
@@ -28,9 +28,9 @@ Add this repo as a marketplace source and install skills:
 Or copy skill directories into your project:
 
 ```sh
-cp -r trifle-stats .claude/skills/
-cp -r trifle-traces .claude/skills/
-cp -r trifle-cli .claude/skills/
+cp -r trifle-stats/skills/trifle-stats .claude/skills/
+cp -r trifle-traces/skills/trifle-traces .claude/skills/
+cp -r trifle-cli/skills/trifle-cli .claude/skills/
 ```
 
 ### OpenAI Codex
@@ -40,9 +40,9 @@ Install skills into your Codex skills directory (`$CODEX_HOME/skills`, defaults 
 ```sh
 CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 mkdir -p "$CODEX_HOME/skills"
-cp -R trifle-stats "$CODEX_HOME/skills/trifle-stats"
-cp -R trifle-traces "$CODEX_HOME/skills/trifle-traces"
-cp -R trifle-cli "$CODEX_HOME/skills/trifle-cli"
+cp -R trifle-stats/skills/trifle-stats "$CODEX_HOME/skills/trifle-stats"
+cp -R trifle-traces/skills/trifle-traces "$CODEX_HOME/skills/trifle-traces"
+cp -R trifle-cli/skills/trifle-cli "$CODEX_HOME/skills/trifle-cli"
 ```
 
 If you want updates in this repo to be reflected immediately, use symlinks instead of copying:
@@ -50,9 +50,9 @@ If you want updates in this repo to be reflected immediately, use symlinks inste
 ```sh
 CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 mkdir -p "$CODEX_HOME/skills"
-ln -s "$(pwd)/trifle-stats" "$CODEX_HOME/skills/trifle-stats"
-ln -s "$(pwd)/trifle-traces" "$CODEX_HOME/skills/trifle-traces"
-ln -s "$(pwd)/trifle-cli" "$CODEX_HOME/skills/trifle-cli"
+ln -s "$(pwd)/trifle-stats/skills/trifle-stats" "$CODEX_HOME/skills/trifle-stats"
+ln -s "$(pwd)/trifle-traces/skills/trifle-traces" "$CODEX_HOME/skills/trifle-traces"
+ln -s "$(pwd)/trifle-cli/skills/trifle-cli" "$CODEX_HOME/skills/trifle-cli"
 ```
 
 Or install from GitHub inside Codex via `$skill-installer`:
@@ -70,9 +70,9 @@ After installing, restart Codex to pick up new skills.
 Copy skill content into `.cursor/rules/`:
 
 ```sh
-cp trifle-stats/SKILL.md .cursor/rules/trifle-stats.mdc
-cp trifle-traces/SKILL.md .cursor/rules/trifle-traces.mdc
-cp trifle-cli/SKILL.md .cursor/rules/trifle-cli.mdc
+cp trifle-stats/skills/trifle-stats/SKILL.md .cursor/rules/trifle-stats.mdc
+cp trifle-traces/skills/trifle-traces/SKILL.md .cursor/rules/trifle-traces.mdc
+cp trifle-cli/skills/trifle-cli/SKILL.md .cursor/rules/trifle-cli.mdc
 ```
 
 ### Windsurf
@@ -81,9 +81,9 @@ Copy skill content into `.windsurf/rules/` or append to `.windsurfrules`:
 
 ```sh
 mkdir -p .windsurf/rules
-cp trifle-stats/SKILL.md .windsurf/rules/trifle-stats.md
-cp trifle-traces/SKILL.md .windsurf/rules/trifle-traces.md
-cp trifle-cli/SKILL.md .windsurf/rules/trifle-cli.md
+cp trifle-stats/skills/trifle-stats/SKILL.md .windsurf/rules/trifle-stats.md
+cp trifle-traces/skills/trifle-traces/SKILL.md .windsurf/rules/trifle-traces.md
+cp trifle-cli/skills/trifle-cli/SKILL.md .windsurf/rules/trifle-cli.md
 ```
 
 ### Cline
@@ -91,9 +91,9 @@ cp trifle-cli/SKILL.md .windsurf/rules/trifle-cli.md
 Copy skill directories into `.cline/skills/`:
 
 ```sh
-cp -r trifle-stats .cline/skills/
-cp -r trifle-traces .cline/skills/
-cp -r trifle-cli .cline/skills/
+cp -r trifle-stats/skills/trifle-stats .cline/skills/
+cp -r trifle-traces/skills/trifle-traces .cline/skills/
+cp -r trifle-cli/skills/trifle-cli .cline/skills/
 ```
 
 ### Any other agent

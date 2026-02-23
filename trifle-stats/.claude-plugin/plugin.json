@@ -1,0 +1,8 @@
+{
+  "name": "trifle-stats",
+  "description": "Time-series metrics in Ruby, Elixir, and Go. Values payload structure, dimensional tracking, duration with standard deviation, key splitting strategies.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Trifle"
+  }
+}

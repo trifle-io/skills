@@ -1,0 +1,8 @@
+{
+  "name": "trifle-cli",
+  "description": "Command-line metrics with local SQLite storage. Agent analytics workflows, push/query patterns, MCP server mode.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Trifle"
+  }
+}

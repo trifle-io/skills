@@ -1,0 +1,8 @@
+{
+  "name": "trifle-traces",
+  "description": "Structured execution tracing in Ruby. Trace conditions, API calls, loops, and objects so the full execution flow is readable.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Trifle"
+  }
+}
