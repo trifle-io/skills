@@ -1,9 +1,24 @@
 {
   "name": "trifle-skills",
   "description": "Agent skills for the Trifle ecosystem. Time-series metrics, execution tracing, and CLI analytics.",
-  "version": "1.0.0",
-  "author": {
-    "name": "Trifle",
-    "url": "https://trifle.io"
-  }
+  "owner": {
+    "name": "Trifle"
+  },
+  "plugins": [
+    {
+      "name": "trifle-stats",
+      "source": "./trifle-stats",
+      "description": "Time-series metrics in Ruby, Elixir, and Go. Values payload structure, dimensional tracking, duration with standard deviation, key splitting strategies."
+    },
+    {
+      "name": "trifle-traces",
+      "source": "./trifle-traces",
+      "description": "Structured execution tracing in Ruby. Trace conditions, API calls, loops, and objects so the full execution flow is readable."
+    },
+    {
+      "name": "trifle-cli",
+      "source": "./trifle-cli",
+      "description": "Command-line metrics with local SQLite storage. Agent analytics workflows, push/query patterns, MCP server mode."
+    }
+  ]
 }
