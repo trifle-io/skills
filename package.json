@@ -1,6 +1,6 @@
 {
   "name": "@trifle-io/install",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Interactive installer for Trifle agent skills, CLI analytics, and developer tooling.",
   "license": "MIT",
   "homepage": "https://docs.trifle.io/trifle-skills/",
