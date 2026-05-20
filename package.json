@@ -1,6 +1,6 @@
 {
-  "name": "@trifle/skills",
-  "version": "1.0.0",
+  "name": "@trifle-io/skills",
+  "version": "1.0.1",
   "description": "Agent skills for the Trifle ecosystem. Time-series metrics, execution tracing, and CLI analytics.",
   "license": "MIT",
   "homepage": "https://docs.trifle.io/trifle-skills/",
@@ -24,7 +24,7 @@
     "tracing"
   ],
   "bin": {
-    "trifle-skills": "./bin/trifle-skills.js"
+    "trifle-skills": "bin/trifle-skills.js"
   },
   "files": [
     "bin/",

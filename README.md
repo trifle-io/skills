@@ -19,35 +19,35 @@ Part of the [Trifle](https://trifle.io) ecosystem.
 Install all Trifle skills with npm/npx:
 
 ```sh
-npx -y @trifle/skills install codex
+npx -y @trifle-io/skills install codex
 ```
 
 Project-local agents use the current directory by default:
 
 ```sh
-npx -y @trifle/skills install claude
-npx -y @trifle/skills install cursor
-npx -y @trifle/skills install windsurf
-npx -y @trifle/skills install cline
+npx -y @trifle-io/skills install claude
+npx -y @trifle-io/skills install cursor
+npx -y @trifle-io/skills install windsurf
+npx -y @trifle-io/skills install cline
 ```
 
 Install a single skill with `--skill`:
 
 ```sh
-npx -y @trifle/skills install codex --skill trifle-stats
+npx -y @trifle-io/skills install codex --skill trifle-stats
 ```
 
 Use `--dir` to install into a different project root. For Codex, `--dir` overrides `$CODEX_HOME`.
 
 ```sh
-npx -y @trifle/skills install claude --dir /path/to/project
-npx -y @trifle/skills install codex --dir /path/to/codex-home
+npx -y @trifle-io/skills install claude --dir /path/to/project
+npx -y @trifle-io/skills install codex --dir /path/to/codex-home
 ```
 
 The installer refuses to overwrite changed files. Re-run with `--force` when you want to replace an existing install:
 
 ```sh
-npx -y @trifle/skills install codex --force
+npx -y @trifle-io/skills install codex --force
 ```
 
 After installing, restart Codex to pick up new skills.

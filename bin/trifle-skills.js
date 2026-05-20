@@ -378,9 +378,9 @@ Skills:
   ${SKILL_NAMES.join(', ')}
 
 Examples:
-  npx -y @trifle/skills install codex
-  npx -y @trifle/skills install claude --dir /path/to/project
-  npx -y @trifle/skills install cursor --skill trifle-stats
+  npx -y @trifle-io/skills install codex
+  npx -y @trifle-io/skills install claude --dir /path/to/project
+  npx -y @trifle-io/skills install cursor --skill trifle-stats
 `);
 }
 
