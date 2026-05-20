@@ -1,0 +1,44 @@
+{
+  "name": "@trifle/skills",
+  "version": "1.0.0",
+  "description": "Agent skills for the Trifle ecosystem. Time-series metrics, execution tracing, and CLI analytics.",
+  "license": "MIT",
+  "homepage": "https://docs.trifle.io/trifle-skills/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trifle-io/skills.git"
+  },
+  "bugs": {
+    "url": "https://github.com/trifle-io/skills/issues"
+  },
+  "keywords": [
+    "agent-skills",
+    "codex",
+    "claude",
+    "cursor",
+    "windsurf",
+    "cline",
+    "trifle",
+    "analytics",
+    "metrics",
+    "tracing"
+  ],
+  "bin": {
+    "trifle-skills": "./bin/trifle-skills.js"
+  },
+  "files": [
+    "bin/",
+    "trifle-cli/skills/",
+    "trifle-stats/skills/",
+    "trifle-traces/skills/",
+    ".claude-plugin/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
