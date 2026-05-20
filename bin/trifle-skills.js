@@ -4,6 +4,7 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const readline = require('readline/promises');
 
 const PACKAGE_ROOT = path.resolve(__dirname, '..');
 const SKILL_NAMES = ['trifle-stats', 'trifle-traces', 'trifle-cli'];
@@ -59,13 +60,47 @@ const TARGETS = {
       type: 'directory',
       path: path.join(root, '.cline', 'skills', skill)
     })
+  },
+  hermes: {
+    label: 'Hermes Agent',
+    defaultRoot: () => path.join(os.homedir(), '.hermes'),
+    destination: (root, skill) => ({
+      type: 'directory',
+      path: path.join(root, 'skills', skill)
+    })
+  },
+  pi: {
+    label: 'Pi Coding Agent',
+    defaultRoot: () => process.env.PI_CODING_AGENT_DIR || path.join(os.homedir(), '.pi', 'agent'),
+    destination: (root, skill) => ({
+      type: 'directory',
+      path: path.join(root, 'skills', skill)
+    })
+  },
+  'pi-project': {
+    label: 'Pi Coding Agent project',
+    defaultRoot: () => process.cwd(),
+    destination: (root, skill) => ({
+      type: 'directory',
+      path: path.join(root, '.pi', 'skills', skill)
+    })
   }
 };
 
-function main(argv) {
+async function main(argv) {
   requireNode18();
 
-  if (argv.length === 0 || argv[0] === '--help' || argv[0] === '-h' || argv[0] === 'help') {
+  if (argv.length === 0) {
+    if (!process.stdin.isTTY || !process.stdout.isTTY) {
+      printHelp();
+      return;
+    }
+
+    await interactiveInstall();
+    return;
+  }
+
+  if (argv[0] === '--help' || argv[0] === '-h' || argv[0] === 'help') {
     printHelp();
     return;
   }
@@ -76,11 +111,27 @@ function main(argv) {
   }
 
   const command = argv.shift();
+  if (command === 'install') {
+    install(argv);
+    return;
+  }
+
+  if (command === 'skills') {
+    if (argv[0] === 'install') {
+      argv.shift();
+    }
+    install(argv);
+    return;
+  }
+
+  if (TARGETS[command]) {
+    install([command, ...argv]);
+    return;
+  }
+
   if (command !== 'install') {
     fail(`Unknown command: ${command}`);
   }
-
-  install(argv);
 }
 
 function requireNode18() {
@@ -98,6 +149,10 @@ function install(argv) {
     return;
   }
 
+  runInstall(options);
+}
+
+function runInstall(options) {
   const target = TARGETS[options.target];
   const root = resolveUserPath(options.dir || target.defaultRoot());
   const operations = buildOperations(options.target, root, options.skills);
@@ -121,6 +176,133 @@ function install(argv) {
 
   if (options.target === 'codex') {
     console.log('Restart Codex to pick up newly installed skills.');
+  }
+}
+
+async function interactiveInstall() {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  try {
+    console.log('Trifle installer');
+    console.log('');
+
+    const target = await choose(rl, 'Where do you want to install Trifle agent skills?', [
+      ['codex', 'Codex global (~/.codex)'],
+      ['claude', 'Claude Code project (.claude/skills)'],
+      ['cursor', 'Cursor project (.cursor/rules)'],
+      ['windsurf', 'Windsurf project (.windsurf/rules)'],
+      ['cline', 'Cline project (.cline/skills)'],
+      ['hermes', 'Hermes Agent global (~/.hermes/skills)'],
+      ['pi', 'Pi global (~/.pi/agent/skills)'],
+      ['pi-project', 'Pi project (.pi/skills)']
+    ]);
+
+    const defaultRoot = TARGETS[target].defaultRoot();
+    const customRoot = await confirm(rl, `Use ${defaultRoot} as the install root?`, true)
+      ? null
+      : await askRequired(rl, 'Install root path: ');
+
+    const skillChoice = await choose(rl, 'Which skills do you want to install?', [
+      ['all', 'All skills'],
+      ['trifle-stats', 'trifle-stats'],
+      ['trifle-traces', 'trifle-traces'],
+      ['trifle-cli', 'trifle-cli'],
+      ['custom', 'Choose multiple']
+    ]);
+
+    let skills = [skillChoice];
+    if (skillChoice === 'custom') {
+      const customSkills = await askRequired(
+        rl,
+        `Enter skills, comma-separated (${SKILL_NAMES.join(', ')}): `
+      );
+      skills = parseSkillList(customSkills);
+    }
+
+    const options = {
+      target,
+      skills: normalizeSkills(skills),
+      dir: customRoot,
+      force: false,
+      help: false
+    };
+
+    const root = resolveUserPath(options.dir || TARGETS[target].defaultRoot());
+    const operations = buildOperations(options.target, root, options.skills);
+    const conflicts = findConflicts(operations, options.force);
+
+    if (conflicts.length > 0) {
+      console.log('');
+      console.log('Existing changed files found:');
+      for (const operation of conflicts) {
+        console.log(`- ${operation.skill}: ${operation.destPath}`);
+      }
+      options.force = await confirm(rl, 'Overwrite these files?', false);
+
+      if (!options.force) {
+        console.log('Install cancelled.');
+        return;
+      }
+    }
+
+    console.log('');
+    runInstall(options);
+  } finally {
+    rl.close();
+  }
+}
+
+async function choose(rl, question, choices) {
+  console.log(question);
+  choices.forEach(([_value, label], index) => {
+    console.log(`  ${index + 1}. ${label}`);
+  });
+
+  while (true) {
+    const answer = await rl.question(`Select 1-${choices.length}: `);
+    const index = Number.parseInt(answer.trim(), 10) - 1;
+
+    if (choices[index]) {
+      console.log('');
+      return choices[index][0];
+    }
+
+    console.log(`Enter a number from 1 to ${choices.length}.`);
+  }
+}
+
+async function confirm(rl, question, defaultValue) {
+  const suffix = defaultValue ? 'Y/n' : 'y/N';
+
+  while (true) {
+    const answer = (await rl.question(`${question} (${suffix}) `)).trim().toLowerCase();
+
+    if (answer === '') {
+      return defaultValue;
+    }
+
+    if (['y', 'yes'].includes(answer)) {
+      return true;
+    }
+
+    if (['n', 'no'].includes(answer)) {
+      return false;
+    }
+
+    console.log('Enter yes or no.');
+  }
+}
+
+async function askRequired(rl, question) {
+  while (true) {
+    const answer = (await rl.question(question)).trim();
+    if (answer) {
+      return answer;
+    }
+    console.log('Enter a value.');
   }
 }
 
@@ -353,12 +535,14 @@ function resolveUserPath(value) {
 }
 
 function printHelp() {
-  console.log(`Trifle Skills
+  console.log(`Trifle installer
 
 Usage:
-  trifle-skills install <target> [options]
-  trifle-skills --help
-  trifle-skills --version
+  trifle-install
+  trifle-install install <target> [options]
+  trifle-install skills <target> [options]
+  trifle-install --help
+  trifle-install --version
 
 Targets:
   codex       Install into CODEX_HOME, or ~/.codex by default
@@ -366,6 +550,9 @@ Targets:
   cursor      Install into .cursor/rules in the current project
   windsurf    Install into .windsurf/rules in the current project
   cline       Install into .cline/skills in the current project
+  hermes      Install into ~/.hermes/skills
+  pi          Install into PI_CODING_AGENT_DIR, or ~/.pi/agent by default
+  pi-project  Install into .pi/skills in the current project
 
 Options:
   --skill <name>  Install one skill. Repeat or comma-separate for multiple.
@@ -378,9 +565,10 @@ Skills:
   ${SKILL_NAMES.join(', ')}
 
 Examples:
-  npx -y @trifle-io/skills install codex
-  npx -y @trifle-io/skills install claude --dir /path/to/project
-  npx -y @trifle-io/skills install cursor --skill trifle-stats
+  npx -y @trifle-io/install
+  npx -y @trifle-io/install install codex
+  npx -y @trifle-io/install skills claude --dir /path/to/project
+  npx -y @trifle-io/install skills cursor --skill trifle-stats
 `);
 }
 
@@ -395,7 +583,10 @@ function fail(message) {
 }
 
 try {
-  main(process.argv.slice(2));
+  main(process.argv.slice(2)).catch((error) => {
+    console.error(`Error: ${error.message}`);
+    process.exit(1);
+  });
 } catch (error) {
   console.error(`Error: ${error.message}`);
   process.exit(1);

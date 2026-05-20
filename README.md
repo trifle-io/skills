@@ -16,38 +16,49 @@ Part of the [Trifle](https://trifle.io) ecosystem.
 
 ### npx (recommended)
 
-Install all Trifle skills with npm/npx:
+Run the interactive installer with npm/npx:
 
 ```sh
-npx -y @trifle-io/skills install codex
+npx -y @trifle-io/install
+```
+
+The installer asks which agent to use, where to install, and which skills to copy.
+
+For non-interactive installs, pass a target:
+
+```sh
+npx -y @trifle-io/install install codex
 ```
 
 Project-local agents use the current directory by default:
 
 ```sh
-npx -y @trifle-io/skills install claude
-npx -y @trifle-io/skills install cursor
-npx -y @trifle-io/skills install windsurf
-npx -y @trifle-io/skills install cline
+npx -y @trifle-io/install install claude
+npx -y @trifle-io/install install cursor
+npx -y @trifle-io/install install windsurf
+npx -y @trifle-io/install install cline
+npx -y @trifle-io/install install hermes
+npx -y @trifle-io/install install pi
+npx -y @trifle-io/install install pi-project
 ```
 
 Install a single skill with `--skill`:
 
 ```sh
-npx -y @trifle-io/skills install codex --skill trifle-stats
+npx -y @trifle-io/install install codex --skill trifle-stats
 ```
 
 Use `--dir` to install into a different project root. For Codex, `--dir` overrides `$CODEX_HOME`.
 
 ```sh
-npx -y @trifle-io/skills install claude --dir /path/to/project
-npx -y @trifle-io/skills install codex --dir /path/to/codex-home
+npx -y @trifle-io/install install claude --dir /path/to/project
+npx -y @trifle-io/install install codex --dir /path/to/codex-home
 ```
 
 The installer refuses to overwrite changed files. Re-run with `--force` when you want to replace an existing install:
 
 ```sh
-npx -y @trifle-io/skills install codex --force
+npx -y @trifle-io/install install codex --force
 ```
 
 After installing, restart Codex to pick up new skills.
@@ -129,6 +140,38 @@ mkdir -p .cline/skills
 cp -r trifle-stats/skills/trifle-stats .cline/skills/
 cp -r trifle-traces/skills/trifle-traces .cline/skills/
 cp -r trifle-cli/skills/trifle-cli .cline/skills/
+```
+
+#### Hermes Agent
+
+Copy skill directories into `~/.hermes/skills/`:
+
+```sh
+mkdir -p ~/.hermes/skills
+cp -r trifle-stats/skills/trifle-stats ~/.hermes/skills/
+cp -r trifle-traces/skills/trifle-traces ~/.hermes/skills/
+cp -r trifle-cli/skills/trifle-cli ~/.hermes/skills/
+```
+
+#### Pi Coding Agent
+
+Copy skill directories into Pi's global skills directory:
+
+```sh
+PI_AGENT_DIR="${PI_CODING_AGENT_DIR:-$HOME/.pi/agent}"
+mkdir -p "$PI_AGENT_DIR/skills"
+cp -r trifle-stats/skills/trifle-stats "$PI_AGENT_DIR/skills/"
+cp -r trifle-traces/skills/trifle-traces "$PI_AGENT_DIR/skills/"
+cp -r trifle-cli/skills/trifle-cli "$PI_AGENT_DIR/skills/"
+```
+
+Or install project-local skills:
+
+```sh
+mkdir -p .pi/skills
+cp -r trifle-stats/skills/trifle-stats .pi/skills/
+cp -r trifle-traces/skills/trifle-traces .pi/skills/
+cp -r trifle-cli/skills/trifle-cli .pi/skills/
 ```
 
 #### Any other agent

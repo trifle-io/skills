@@ -1,7 +1,7 @@
 {
-  "name": "@trifle-io/skills",
-  "version": "1.0.1",
-  "description": "Agent skills for the Trifle ecosystem. Time-series metrics, execution tracing, and CLI analytics.",
+  "name": "@trifle-io/install",
+  "version": "1.0.0",
+  "description": "Interactive installer for Trifle agent skills, CLI analytics, and developer tooling.",
   "license": "MIT",
   "homepage": "https://docs.trifle.io/trifle-skills/",
   "repository": {
@@ -12,6 +12,7 @@
     "url": "https://github.com/trifle-io/skills/issues"
   },
   "keywords": [
+    "installer",
     "agent-skills",
     "codex",
     "claude",
@@ -24,7 +25,7 @@
     "tracing"
   ],
   "bin": {
-    "trifle-skills": "bin/trifle-skills.js"
+    "trifle-install": "bin/trifle-skills.js"
   },
   "files": [
     "bin/",
